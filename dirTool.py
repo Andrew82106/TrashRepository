@@ -3,6 +3,9 @@ import shutil
 
 
 class ToolBags:
+    def __init__(self) -> None:
+        self.res_ = []
+
 
     @staticmethod
     def addRst(Path: str, FileName: str):  # 新建一个rst文件
@@ -52,8 +55,45 @@ class ToolBags:
             shutil.copy(srcfile, dstpath + fname)  # 复制文件
             print("copy %s -> %s" % (srcfile, dstpath + fname))
 
+    def Copy_from_anything(self, srcPath: str, dstPath: str):
+        # 将srcPath文件或者地址下的所有文件赋值到dstPath地址以下
+        isFile_src = os.path.isfile(srcPath)
+        isdir_src = os.path.isdir(srcPath)
+        if not (isFile_src or isdir_src):
+            print("不存在文件或目录:{}".format(srcPath))
+            return
+        isFile_dst = os.path.isfile(dstPath)
+        isdir_dst = os.path.isdir(dstPath)
+        if not (isFile_dst or isdir_dst):
+            print("不存在目录:{}".format(srcPath))
+            os.makedirs(dstPath)  # 创建路径
+            print("创建目录:{}".format(dstPath))
+        if isFile_src:
+            self.copyfile(srcPath, dstPath + '/')
+        else:  # 从目录到目录
+            FileList = self.getAllFilesUnder(srcPath)
+            for fileI in FileList:
+                newDstPath = dstPath + str(fileI).replace(srcPath, "")
+                if os.path.isdir(fileI):
+                    os.makedirs(newDstPath)
+                else:
+                    fpath, fname = os.path.split(newDstPath)
+                    self.copyfile(fileI, newDstPath.replace(fname, ''))
+        
+
+
+    def getAllFilesUnder(self, route_):
+        self.res_ = []
+        for filepath, dirnames, filenames in os.walk(route_):
+            for filename in filenames:
+                path__ = os.path.join(filepath, filename)
+                self.res_.append(path__)
+        return self.res_
+        
 
 if __name__ == '__main__':
-    a = ToolBags
-    # print(a.ls("/Users/andrewlee/Desktop/PPSUC_WIKI_WEB/GitToSphinx"))
+    a = ToolBags()
+    route1 = "/Users/andrewlee/Desktop/Projects/代码复用库/labs/file1/hello.cpp"
+    route2 = "/Users/andrewlee/Desktop/Projects/代码复用库/labs"
+    z = a.Copy_from_anything(route1, route2)
     # print(a.is_dir("/Users/andrewlee/Desktop/PPSUC_WIKI_WEB/GitToSphinx/mkRST.py"))
