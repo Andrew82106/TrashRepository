@@ -6,17 +6,16 @@ class ToolBags:
     def __init__(self) -> None:
         self.res_ = []
 
-
     @staticmethod
     def addRst(Path: str, FileName: str):  # 新建一个rst文件
         isExists = os.path.exists(Path)
         if not isExists:
             File = open('{}/{}'.format(Path, FileName), 'w', encoding='utf-8')
-            print("INFO::" + Path + ' 创建{}成功'.format(Path+FileName))
+            print("INFO::" + Path + ' 创建{}成功'.format(Path + FileName))
             return File
         else:
             # 如果目录存在则不创建，并提示目录已存在
-            print("INFO::" + Path + ' {}文件已存在'.format(Path+FileName))
+            print("INFO::" + Path + ' {}文件已存在'.format(Path + FileName))
             return False
 
     @staticmethod
@@ -79,8 +78,6 @@ class ToolBags:
                 else:
                     fpath, fname = os.path.split(newDstPath)
                     self.copyfile(fileI, newDstPath.replace(fname, ''))
-        
-
 
     def getAllFilesUnder(self, route_):
         self.res_ = []
@@ -89,7 +86,7 @@ class ToolBags:
                 path__ = os.path.join(filepath, filename)
                 self.res_.append(path__)
         return self.res_
-        
+
 
 if __name__ == '__main__':
     a = ToolBags()
